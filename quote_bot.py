@@ -29,10 +29,13 @@ $quote [name] - this will output a random quote by the given person!
 
 $quote - this will output a random quote by a random person! (because I am doing this fast this will transfer across servers, so you can get quotes entered by users on other servers)""")
 
-    if message.content.lower().startswith('$addquote'):
+    if message.content.lower().startswith('$addquote '):
         try:
             content = message.content.split(' ', 2) #max split of 3, so [0] is '$quote', [1] is the name and [2] is the quote
-            filename = os.getcwd() + '/quote-files/' + content[1].lower()[2:-1] + '.txt'
+            if content[1].lower().startswith('<'):
+                filename = os.getcwd() + '/quote-files/' + content[1].lower()[2:-1] + '.txt'
+            else:
+                filename = os.getcwd() + '/quote-files/' + content[1].lower() + '.txt'
             if not exists(filename):
                 towrite = content[2]
             else: 
@@ -49,14 +52,17 @@ $quote - this will output a random quote by a random person! (because I am doing
         finally:
             return
 
-    if message.content.lower().startswith('$quote'):
+    if message.content.lower().startswith('$quote '):
         try:
             content = message.content.split()
             if message.content.lower() == '$quote': #if the user has entered only '$quote'
                 filename = os.getcwd() + '/quote-files/' + random.choice(os.listdir(os.getcwd() + '/quote-files'))
                 out = ' - Someone'
             else:
-                filename = os.getcwd() + '/quote-files/' + content[1].lower()[2:-1] + '.txt'
+                if content[1].lower().startswith('<'):
+                    filename = os.getcwd() + '/quote-files/' + content[1].lower()[2:-1] + '.txt'
+                else:
+                    filename = os.getcwd() + '/quote-files/' + content[1].lower() + '.txt'
                 out = ' - ' + content[1]
             f = open(filename, 'r')
             quotes = f.readlines()
