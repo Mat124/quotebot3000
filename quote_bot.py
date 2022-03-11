@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import random
 import discord
 import os
+from os.path import exists
 
 load_dotenv()
 
@@ -31,9 +32,13 @@ $quote - this will output a random quote by a random person! (because I am doing
     if message.content.lower().startswith('$addquote'):
         try:
             content = message.content.split(' ', 2) #max split of 3, so [0] is '$quote', [1] is the name and [2] is the quote
-            filename = os.getcwd() + '/quote-files/' + content[1].lower() + '.txt'
+            filename = os.getcwd() + '/quote-files/' + content[1].lower()[2:-1] + '.txt'
+            if not exists(filename):
+                towrite = content[2]
+            else: 
+                towrite = '\n' + content[2]
             f = open(filename, 'a')
-            f.write('\n' + content[2])
+            f.write(towrite)
             f.close()
             await message.channel.send('Quote by ' + content[1] + ' has been stored!')
 
@@ -51,7 +56,7 @@ $quote - this will output a random quote by a random person! (because I am doing
                 filename = os.getcwd() + '/quote-files/' + random.choice(os.listdir(os.getcwd() + '/quote-files'))
                 out = ' - Someone'
             else:
-                filename = os.getcwd() + '/quote-files/' + content[1].lower() + '.txt'
+                filename = os.getcwd() + '/quote-files/' + content[1].lower()[2:-1] + '.txt'
                 out = ' - ' + content[1]
             f = open(filename, 'r')
             quotes = f.readlines()
