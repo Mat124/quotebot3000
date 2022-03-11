@@ -52,7 +52,7 @@ $quote - this will output a random quote by a random person! (because I am doing
         finally:
             return
 
-    if message.content.lower().startswith('$quote '):
+    if message.content.lower().startswith('$quote'):
         try:
             content = message.content.split()
             if message.content.lower() == '$quote': #if the user has entered only '$quote'
