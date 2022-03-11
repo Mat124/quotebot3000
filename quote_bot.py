@@ -21,6 +21,36 @@ async def on_message(message):
     if message.author == client.user:
         return
     
+    if 69*random.random() < 1:
+        filename = os.getcwd() + '/points/' + str(message.author.id) + '.txt'
+
+        if exists(filename):
+            f = open(filename, 'r')
+            score = int(f.readline())
+            f.close()
+        else:
+            score = 0
+        
+        score += 1
+        f = open(filename, 'w')
+        f.write(str(score))
+        f.close()
+        print("gave out some points")
+        await message.channel.send("Congratulations, you have earnt 1 bungalow point. You now have " + str(score) + " points! Don't spend them all in one place!")
+
+    if message.content.startswith('$points'):
+        filename = os.getcwd() + '/points/' + str(message.author.id) + '.txt'
+
+        if not exists(filename):
+            await message.channel.send("You have 0 points. Send some messages. Or else.")
+            return
+
+        f = open(filename, 'r')
+        score = int(f.readline())
+        f.close()
+        await message.channel.send("You have " + str(score) + " points!")
+        return
+
     if message.content.startswith('$help'):
         await message.channel.send("""Hello! I am quotebot3000. Usage:
 
