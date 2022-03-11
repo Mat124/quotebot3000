@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import random
 import discord
 import os
+import re
 from os.path import exists
 
 load_dotenv()
@@ -33,7 +34,8 @@ $quote - this will output a random quote by a random person! (because I am doing
         try:
             content = message.content.split(' ', 2) #max split of 3, so [0] is '$quote', [1] is the name and [2] is the quote
             if content[1].lower().startswith('<'):
-                filename = os.getcwd() + '/quote-files/' + content[1].lower()[2:-1] + '.txt'
+                ID = re.findall('[0-9]+', content[1].lower())[0]
+                filename = os.getcwd() + '/quote-files/' + ID + '.txt'
             else:
                 filename = os.getcwd() + '/quote-files/' + content[1].lower() + '.txt'
             if not exists(filename):
@@ -60,7 +62,8 @@ $quote - this will output a random quote by a random person! (because I am doing
                 out = ' - Someone'
             else:
                 if content[1].lower().startswith('<'):
-                    filename = os.getcwd() + '/quote-files/' + content[1].lower()[2:-1] + '.txt'
+                    ID = re.findall('[0-9]+', content[1].lower())[0]
+                    filename = os.getcwd() + '/quote-files/' + ID + '.txt'
                 else:
                     filename = os.getcwd() + '/quote-files/' + content[1].lower() + '.txt'
                 out = ' - ' + content[1]
