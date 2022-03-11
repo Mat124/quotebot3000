@@ -47,7 +47,7 @@ $quote - this will output a random quote by a random person! (because I am doing
 
         except Exception as e:
             print(e)
-            await message.channel.send('Badly formatted $addquote attempt!')
+            await message.channel.send('Badly formatted $addquote attempt! Use $help for more info.')
 
         finally:
             return
@@ -72,7 +72,7 @@ $quote - this will output a random quote by a random person! (because I am doing
 
         except Exception as e:
             print(e)
-            await message.channel.send('Badly formatted $quote attempt! Are you sure that person has quotes?')
+            await message.channel.send('Badly formatted $quote attempt! Are you sure that person has quotes? Use $help for more info.')
 
         finally:
             return
