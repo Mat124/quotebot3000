@@ -1,1 +1,0 @@
-if it walks like a duck and speaks like a duck, jenkins is a nonce
