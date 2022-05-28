@@ -12,15 +12,17 @@ token = os.getenv('BOT_TOKEN')
 
 client = discord.Client()
 
+
 @client.event
 async def on_ready():
     print('Logged in as {0.user}'.format(client))
+
 
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
-    
+
     if 69*random.random() < 1:
         filename = os.getcwd() + '/points/' + str(message.author.id) + '.txt'
 
@@ -30,13 +32,16 @@ async def on_message(message):
             f.close()
         else:
             score = 0
-        
+
         score += 1
         f = open(filename, 'w')
         f.write(str(score))
         f.close()
         print("gave out some points")
-        await message.channel.send("Congratulations, you have earnt 1 bungalow point. You now have " + str(score) + " points! Don't spend them all in one place!")
+        # react to message to indicate a point has been earnt
+        await message.add_reaction(':bungalow:980140106868477973')
+        # old code
+        # await message.channel.send("Congratulations, you have earnt 1 bungalow point. You now have " + str(score) + " points! Don't spend them all in one place!")
 
     if message.content.startswith('$points'):
         filename = os.getcwd() + '/points/' + str(message.author.id) + '.txt'
@@ -62,15 +67,17 @@ $quote - this will output a random quote by a random person! (because I am doing
 
     if message.content.lower().startswith('$addquote '):
         try:
-            content = message.content.split(' ', 2) #max split of 3, so [0] is '$quote', [1] is the name and [2] is the quote
+            # max split of 3, so [0] is '$quote', [1] is the name and [2] is the quote
+            content = message.content.split(' ', 2)
             if content[1].lower().startswith('<'):
                 ID = re.findall('[0-9]+', content[1].lower())[0]
                 filename = os.getcwd() + '/quote-files/' + ID + '.txt'
             else:
-                filename = os.getcwd() + '/quote-files/' + content[1].lower() + '.txt'
+                filename = os.getcwd() + '/quote-files/' + \
+                    content[1].lower() + '.txt'
             if not exists(filename):
                 towrite = content[2]
-            else: 
+            else:
                 towrite = '\n' + content[2]
             f = open(filename, 'a')
             f.write(towrite)
@@ -87,15 +94,17 @@ $quote - this will output a random quote by a random person! (because I am doing
     if message.content.lower().startswith('$quote'):
         try:
             content = message.content.split()
-            if message.content.lower() == '$quote': #if the user has entered only '$quote'
-                filename = os.getcwd() + '/quote-files/' + random.choice(os.listdir(os.getcwd() + '/quote-files'))
+            if message.content.lower() == '$quote':  # if the user has entered only '$quote'
+                filename = os.getcwd() + '/quote-files/' + \
+                    random.choice(os.listdir(os.getcwd() + '/quote-files'))
                 out = ' - Someone'
             else:
                 if content[1].lower().startswith('<'):
                     ID = re.findall('[0-9]+', content[1].lower())[0]
                     filename = os.getcwd() + '/quote-files/' + ID + '.txt'
                 else:
-                    filename = os.getcwd() + '/quote-files/' + content[1].lower() + '.txt'
+                    filename = os.getcwd() + '/quote-files/' + \
+                        content[1].lower() + '.txt'
                 out = ' - ' + content[1]
             f = open(filename, 'r')
             quotes = f.readlines()
