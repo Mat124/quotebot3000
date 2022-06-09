@@ -10,7 +10,7 @@ load_dotenv()
 
 token = os.getenv('BOT_TOKEN')
 
-client = discord.Client()
+client = discord.Client(intents=discord.Intents.all())
 
 
 @client.event
