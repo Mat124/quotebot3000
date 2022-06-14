@@ -1,22 +1,41 @@
-from pydoc import cli
-from dotenv import load_dotenv
-import random
-import discord
 import os
+import random
 import re
+from datetime import timezone
 from os.path import exists
+from time import time
+
+import discord
+from dotenv import load_dotenv
 
 load_dotenv()
 
 token = os.getenv('BOT_TOKEN')
 
-client = discord.Client()
+league_channel = int(os.getenv('LEAGUE_CHANNEL'))
+league_cooldowns = {}
+
+client = discord.Client(intents=discord.Intents.all())
 
 
 @client.event
 async def on_ready():
     print('Logged in as {0.user}'.format(client))
 
+@client.event
+async def on_member_update(before, after):
+    game = [i for i in after.activities if str(
+        i.type) == "ActivityType.playing"]
+    for i in game:
+        if i.name.lower() == "league of legends" and time() > league_cooldowns.get(after.id, 0):
+            if i.start:
+                await client.get_channel(league_channel).send(
+                    f"{after.mention}, stop playing league! You have been playing for {int(time() - i.start.replace(tzinfo=timezone.utc).timestamp())} seconds")
+            else:
+                await client.get_channel(league_channel).send(
+                    f"{after.mention}, stop playing league!")
+            league_cooldowns.pop(after.id, None)
+            league_cooldowns[after.id] = time() + 3600
 
 @client.event
 async def on_message(message):
