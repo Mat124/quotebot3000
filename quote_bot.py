@@ -1,12 +1,12 @@
-from pydoc import cli
-from dotenv import load_dotenv
-import random
-import discord
 import os
+import random
 import re
+from datetime import timezone
 from os.path import exists
 from time import time
-from datetime import timezone
+
+import discord
+from dotenv import load_dotenv
 
 load_dotenv()
 
